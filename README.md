@@ -1,16 +1,23 @@
 # Modüler Otonom Takip ve Güdüm
 
+[![Tests](https://github.com/umutcaliskann/otonom-takip/actions/workflows/tests.yml/badge.svg)](https://github.com/umutcaliskann/otonom-takip/actions/workflows/tests.yml)
+
 Bu paket, sabit kanatlı bir İHA için otonom hedef takip ve güdüm algoritmalarını
 test edilebilir modüllere ayırır. Sistem yalnızca gecikmeli telemetri ve hedef
 bbox girdisiyle çalışacak şekilde tasarlanmıştır. Kamera burun kısmında sabit ve
 gövde ileri ekseniyle hizalı kabul edilir; gimbal, attitude veya ek sensör verisi
 kullanılmaz.
 
+**Çıktı:** Seçilen hedef, takip durumu ve hesaplanan yönelim/hız isteği.
+Yazılım gerçek otopilota komut göndermez; `DryRunAutopilotAdapter` komutu bellekte tutar.
+
 ## Kurulum
 
 Python 3.10 veya üstüyle, proje kök dizininde:
 
 ```bash
+git clone https://github.com/umutcaliskann/otonom-takip.git
+cd otonom-takip
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
@@ -53,16 +60,31 @@ python3 -m examples.long_synthetic_simulation
 python3 -m unittest discover -v
 ```
 
+İlk örnek, önce yalnızca telemetriyle yaklaşma (`APPROACH`), ardından geçerli
+hedef kutusuyla görsel takip (`TRACK`) çıktısını terminale yazdırır.
+GitHub Actions, testleri ve bu örneği Python 3.10 ve 3.12 ile çalıştırır.
+
 JSONL kaydı varsa `python -m examples.replay_log yol/kayit.jsonl` ile yeniden işlenebilir.
 Kayıt varsayılan olarak kapalıdır; `config/default.yaml` içinde `logging.path` ayarlanarak açılır.
 
-Config dosyasıyla kullanım:
+### Python arayüzü
 
 ```python
-from autonomous_tracking import AutonomousTrackingPipeline, PipelineConfig
+from autonomous_tracking import (
+    AutonomousTrackingPipeline,
+    PipelineConfig,
+    TargetBBox,
+    TargetTelemetry,
+    UavTelemetry,
+)
 
 config = PipelineConfig.from_file("config/default.yaml")
 pipeline = AutonomousTrackingPipeline(config)
+ego = UavTelemetry(39.0, 32.0, 1000.0, 22.0, 90.0, 10.0)
+targets = [TargetTelemetry("A", 39.001, 32.004, 1030.0, 20.0, 260.0, 10.0)]
+bbox = TargetBBox(x_px=714, y_px=288, width_px=92, height_px=54, timestamp_s=10.35)
+status = pipeline.process(ego, targets, bbox, current_time_s=10.35)
+print(status.state, status.command)
 ```
 
 ## Notlar
@@ -70,7 +92,10 @@ pipeline = AutonomousTrackingPipeline(config)
 Tüm koordinat ve hız hesapları SI birimleriyle yapılır. Açı alanları model
 dokümantasyonunda derece veya radyan olarak açıkça belirtilmiştir.
 `AutonomousTrackingPipeline.process(...)` her çağrıda `TrackingStatus` döndürür;
-asıl uçuş komutu `status.command` alanındadır.
+hesaplanan komut isteği `status.command` alanındadır.
 Bbox hedef kimliği içermez; verilen kutunun seçilen telemetri hedefine ait olduğu
 varsayılır. Gerçek MAVLink/PX4 gönderimi veya mod değişikliği yapılmaz.
-`DryRunAutopilotAdapter` yalnızca hesaplanan komutu bellekte tutar.
+
+## Lisans
+
+Bu proje [MIT Lisansı](LICENSE) ile paylaşılır.

@@ -1,16 +1,23 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "autonomous-tracking"
 version = "0.1.0"
 description = "Modular autonomous target tracking and fixed-wing guidance algorithms"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.23",
     "PyYAML>=6.0",
 ]
+
+[project.urls]
+Repository = "https://github.com/umutcaliskann/otonom-takip"
+Issues = "https://github.com/umutcaliskann/otonom-takip/issues"
 
 [tool.setuptools]
 packages = ["autonomous_tracking", "examples"]
