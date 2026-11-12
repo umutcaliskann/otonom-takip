@@ -1,0 +1,24 @@
+# Python caches and test output
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Local environments and build output
+.venv/
+venv/
+build/
+dist/
+*.egg-info/
+.env
+.env.*
+
+# Generated logs, local report workspace, and OS metadata
+*.jsonl
+/work/
+/outputs/
+.DS_Store
