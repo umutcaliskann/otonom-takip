@@ -1,0 +1,58 @@
+camera:
+  image_width_px: 1280
+  image_height_px: 720
+  horizontal_fov_deg: 70.0
+  vertical_fov_deg: 43.0
+  distortion: null
+
+validation:
+  min_visual_confidence: 0.45
+  max_telemetry_age_s: 2.0
+  max_bbox_age_s: 0.5
+  min_bbox_area_ratio: 0.0001
+
+state_machine:
+  lost_timeout_s: 1.0
+  reacquire_timeout_s: 3.0
+
+smoothing:
+  max_delta_roll_deg: 8.0
+  max_delta_pitch_deg: 5.0
+  max_delta_airspeed_mps: 3.0
+
+safety:
+  max_roll_deg: 35.0
+  max_pitch_deg: 15.0
+  max_yaw_rate_deg_s: 25.0
+  min_airspeed_mps: 16.0
+  max_airspeed_mps: 30.0
+  safe_airspeed_mps: 22.0
+  close_distance_m: 45.0
+
+guidance:
+  navigation_constant: 3.0
+  los_angle_gain: 70.0
+  los_rate_gain: 28.0
+  max_roll_deg: 35.0
+  max_pitch_deg: 15.0
+  max_yaw_rate_deg_s: 25.0
+
+speed:
+  min_airspeed_mps: 16.0
+  cruise_airspeed_mps: 22.0
+  max_airspeed_mps: 30.0
+  far_distance_m: 500.0
+  near_distance_m: 90.0
+  small_bbox_ratio: 0.004
+  large_bbox_ratio: 0.08
+
+telemetry_compensation:
+  enabled: true
+  max_prediction_dt_s: 2.0
+
+target_lock:
+  switch_distance_ratio: 0.75
+  switch_confirmations: 2
+
+logging:
+  path: null

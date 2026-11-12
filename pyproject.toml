@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "autonomous-tracking"
+version = "0.1.0"
+description = "Modular autonomous target tracking and fixed-wing guidance algorithms"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.23",
+    "PyYAML>=6.0",
+]
+
+[tool.setuptools]
+packages = ["autonomous_tracking", "examples"]
